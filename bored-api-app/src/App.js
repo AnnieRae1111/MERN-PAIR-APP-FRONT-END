@@ -49,7 +49,7 @@ const getActivities = () => {
     console.log(newActivity)
   }
 
-  //this is submitting data to the API and making it show up here.
+  //this is submitting data to the API and making it show up on the browser.
   const handleSubmit = (event) => {
     event.preventDefault()
     const newItem = { 
@@ -62,8 +62,10 @@ const getActivities = () => {
     console.log(activities)
     axios.post(url, items)
   }
-
-
+  //Need to make the delete button target the ID and delete the item from the activities
+  const handleClick = (event) => {
+    event.target.id 
+  }
 
   return (
     <>
@@ -78,7 +80,12 @@ const getActivities = () => {
             <input type="submit"></input>
         </form>
       {activityData.map(activity => {
-        return(<p>{ activity.activity }</p>)})}
+        return(
+          <div>
+            <p>{ activity.activity }</p>
+            <button onClick={ handleClick }> Delete </button>  
+          </div>
+      )})}
       {/* <div>{ activities }</div>  */}
     {/* <p> {!data ? "Loading..." : data} </p> */}
     {/* <ActivityForm activities ={activities} handleSubmit={handleSubmit} handleChange={handleChange} newActivity={newActivity}/> */}
