@@ -36,6 +36,8 @@ const getActivities = () => {
     .then(res => setActivityData(res.data))
     .catch(console.log)
 }
+
+  console.log(activityData)
   
   useEffect(()=> {
     getActivities(activityData)
@@ -63,9 +65,15 @@ const getActivities = () => {
     axios.post(url, items)
   }
   //Need to make the delete button target the ID and delete the item from the activities
-  const handleClick = (event) => {
-    event.target.id 
+  const handleClick = (activity) => {
+    
+    console.log(activity._id)
+    const uniqueURL = `http://localhost:8080/activity/${activity._id}`
+    axios
+      .delete(uniqueURL, activity._id)
   }
+
+  // console.log(activityData._id)
 
   return (
     <>
@@ -83,7 +91,7 @@ const getActivities = () => {
         return(
           <div>
             <p>{ activity.activity }</p>
-            <button onClick={ handleClick }> Delete </button>  
+            <button onClick={ () => { handleClick(activity)}}> Delete </button>  
           </div>
       )})}
       {/* <div>{ activities }</div>  */}
