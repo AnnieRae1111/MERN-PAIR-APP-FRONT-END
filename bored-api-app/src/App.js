@@ -1,8 +1,8 @@
-import {React, useState, useEffect} from "react"
-import './App.css';
-import ActivityList from './ActivityList';
+import { React, useState, useEffect } from "react";
+import "./App.css";
+import ActivityList from "./ActivityList";
 import ActivityForm from "./ActivityForm";
-import axios from "axios"
+import axios from "axios";
 
 
 const activitiesData = [
@@ -11,69 +11,84 @@ const activitiesData = [
     accessibility: 0.1,
     type: "relaxation",
     participants: 1,
-    price: 0.15
-},
-{
+    price: 0.15,
+  },
+  {
     activity: "Learn how to fold a paper crane",
     accessibility: 0.05,
     type: "education",
     participants: 1,
     price: 0.1,
-    key: "3136036"
-},
-]
-
+    key: "3136036",
+  },
+];
 
 function App() {
   // const [data, setData] =useState(null)
-  const [activities, setActivities] = useState([])
-  const [newActivity, setNewActivity] = useState({
-    activity: ""
-  }) 
+  const [activities, setActivities] = useState([]); //will use this to set initial data 
+  const [newActivity, setNewActivity] = useState("") //new variable to track handleChange . This variable will be used to update our state 
 
-  useEffect(()=> {
-    fetch('https://localhost:8080/activity')
-    .then((res)=> res.json())
-    .then((data)=> {
-      console.log(data)
-      setActivities(data)
-      console.log(activities)
+
+  const BASE_URL = "http://localhost:8080/api/activity";
+  const getActivities = () => {
+    axios.get(BASE_URL).then((res) => {
+      // console.log(res.data)
+      setActivities(res.data);
+    });
+  };
+
+  useEffect(() => {
+    getActivities(activities);
+  }, []);
+
+  if(!activities){
+    return <p>Loading activities</p>
+  }
+
+  const handleChange = (event) => {
+    setNewActivity(event.target.value);
+    //new activity is whatever is typed into input box
+    console.log(newActivity);
+  };
+
+
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    const newItem = {
+      activity: newActivity
+    }
+    const items = [...activities, newItem]
+    console.log(items)
+    setActivities(items)
+    console.log(activities)
+    axios.post(BASE_URL, items)
+    setNewActivity("")
+  }
+
+
+  const markComplete = (id) => {
+    const url3 = BASE_URL + id
+    console.log(url3)
+    axios.delete(url3)
+    .then(()=>{
+      console.log("this was deleted")
+
     })
-  }, [])
-  
-  const handleChange = (event) => { 
-    setNewActivity(event.target.value)    
-   //new activity is whatever is typed into input box 
-    console.log(newActivity)
 
   }
 
-  // const handleSubmit = (event) => {
-  //   event.preventDefualt()
-  //   const newItem = { 
-  //     activity: newActivity.activity
-  //   }
-  //   axios.post('http://localhost:3001/create', newItem)
-
-  //   // let test = [...activities] //test is now equal to an array that holds all the acitivities
-  //   // test = [...test, {activity: newActivity}] //adding onto the data  
-  //   // setActivities(test) //setting the activities data to the original data plus the new input data 
-  //   // console.log('submit info')
-  //   // setNewActivity('') //this resets the input box after submit the button has been clicked 
-  // }
-
   return (
     <>
-    <div className= "app">
-      <div>{ activities }</div> 
-    {/* <p> {!data ? "Loading..." : data} </p> */}
-    <ActivityForm activities ={activities} handleSubmit={handleSubmit} handleChange={handleChange} newActivity={newActivity}/>
-    <ActivityList activities={activities} />
-    
-    </div>
-    
+      <ActivityForm
+        activities={activities}
+        handleSubmit={handleSubmit}
+        handleChange={handleChange}
+        newActivity={newActivity}
+        markComplete = {markComplete}
+      />
+      <ActivityList activities={activities} markComplete={markComplete} />
     </>
-  )
+  );
 }
 
 export default App;

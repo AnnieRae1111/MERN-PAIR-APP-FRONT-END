@@ -1,0 +1,72 @@
+.create-activity-form-container {
+    margin: 30px 30px 30px 30px;
+    display: flex;
+    border: 1px solid;
+    padding: 0.7rem;
+    background-color: lightseagreen;
+}
+h3 {
+    margin: 20px;
+}
+
+.label {
+    color: white;
+    margin-right: 20px;
+    margin-left: 20px;
+}
+
+ul {
+    display: flex;
+}
+
+.app {
+    height: 600px;
+    width: 800px;
+    border: 1px solid;
+    margin: 0 auto;
+    margin-top: 50px;
+    justify-content: center;
+}
+
+.item-container {
+    border: 1px solid;
+    margin: 30px;
+    border-radius: 20px;
+}
+
+.item {
+    display: flex;
+    justify-content: space-between;
+}
+
+.to-do-item {
+    margin-left: 30px;
+}
+
+.mark-complete {
+    margin-right: 30px;
+}
+
+input {
+    width: 400px;
+    justify-content: center;
+    margin-left: 50px;
+    padding: 12px 20px;
+}
+
+button {
+    margin: 20px;
+    padding: 20px 30px 20px 30px;
+    color: black;
+    background-color: plum;
+    outline: none;
+    border: none;
+    border-radius: 10px;
+}
+
+.label {
+    color: white;
+    font-size: 25px;
+    align-items: center;
+    font-weight: 500;
+}
