@@ -1,7 +1,7 @@
 import {React, useState, useEffect} from "react"
 import './App.css';
-import ActivityList from './ActivityList';
-import ActivityForm from "./ActivityForm";
+// import ActivityList from './ActivityList';
+// import ActivityForm from "./ActivityForm";
 import axios from "axios"
 
 
@@ -25,50 +25,64 @@ const activitiesData = [
 
 
 function App() {
-  // const [data, setData] =useState(null)
+  const [activityData, setActivityData] = useState([])
   const [activities, setActivities] = useState([])
-  const [newActivity, setNewActivity] = useState({
-    activity: ""
-  }) 
+  const [newActivity, setNewActivity] = useState() 
 
-  useEffect(()=> {
-    fetch('https://localhost:8080/activity')
-    .then((res)=> res.json())
-    .then((data)=> {
-      console.log(data)
-      setActivities(data)
-      console.log(activities)
-    })
-  }, [])
+const url = "http://localhost:8080/activity"
+
+const getActivities = () => {
+  axios.get(url, {activity: newActivity})
+    .then(res => setActivityData(res.data))
+    .catch(console.log)
+}
   
+  useEffect(()=> {
+    getActivities(activityData)
+  }, [])
+
+
+
   const handleChange = (event) => { 
     setNewActivity(event.target.value)    
    //new activity is whatever is typed into input box 
     console.log(newActivity)
-
   }
 
-  // const handleSubmit = (event) => {
-  //   event.preventDefualt()
-  //   const newItem = { 
-  //     activity: newActivity.activity
-  //   }
-  //   axios.post('http://localhost:3001/create', newItem)
+  //this is submitting data to the API and making it show up here.
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    const newItem = { 
+      activity: newActivity
+    }
+    const items = [...activities, newItem]
+    console.log(items)//items is now an array of objects, which is what we want to send to db
+    //each time you press submit, it adds to the array. so that's working
+    setActivities(items)
+    console.log(activities)
+    axios.post(url, items)
+  }
 
-  //   // let test = [...activities] //test is now equal to an array that holds all the acitivities
-  //   // test = [...test, {activity: newActivity}] //adding onto the data  
-  //   // setActivities(test) //setting the activities data to the original data plus the new input data 
-  //   // console.log('submit info')
-  //   // setNewActivity('') //this resets the input box after submit the button has been clicked 
-  // }
+
 
   return (
     <>
     <div className= "app">
-      <div>{ activities }</div> 
+      <form onSubmit={ handleSubmit }>  
+            <label className = "label"> NEW ACTIVITY: 
+            <input type="text" id="activity" name="activity"
+            value={newActivity}
+            onChange = { handleChange}
+            />
+            </label>
+            <input type="submit"></input>
+        </form>
+      {activityData.map(activity => {
+        return(<p>{ activity.activity }</p>)})}
+      {/* <div>{ activities }</div>  */}
     {/* <p> {!data ? "Loading..." : data} </p> */}
-    <ActivityForm activities ={activities} handleSubmit={handleSubmit} handleChange={handleChange} newActivity={newActivity}/>
-    <ActivityList activities={activities} />
+    {/* <ActivityForm activities ={activities} handleSubmit={handleSubmit} handleChange={handleChange} newActivity={newActivity}/> */}
+    {/* <ActivityList activities={activities} /> */}
     
     </div>
     

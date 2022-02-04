@@ -1,15 +1,10 @@
+import React from "react";
+
 const ActivityForm = ({activities, handleSubmit, handleChange, newActivity}) => {
     return (  
         <>
         <div className = "create-activity-form-container">
-        <form onSubmit={handleSubmit}>  
-            <label className = "label"> NEW ACTIVITY: 
-            <input type="text" id="activity" name="activity"
-            value={newActivity}
-            onChange = { handleChange}
-            />
-            </label>
-        </form>
+       
         </div>
         </>
     );
