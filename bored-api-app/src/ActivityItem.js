@@ -2,10 +2,10 @@
     return (
         <div className="item-container">
         <div className="item">
-            <h3>{activity.activity}</h3>
+            <h3>{activity.activity}</h3> 
             <button
             onClick={() => {
-                markComplete(activity.id);
+                markComplete(activity);
             }}
             >
             DELETE

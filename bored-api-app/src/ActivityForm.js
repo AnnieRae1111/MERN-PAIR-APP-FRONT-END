@@ -21,7 +21,8 @@
                 onChange={handleChange}
                 />
             </label>
-            <button type="submit">Submit</button>
+            <button type="submit">Submit</button> 
+            <button type="submit">Get Activities</button>
             </form>
         </div>
         </>

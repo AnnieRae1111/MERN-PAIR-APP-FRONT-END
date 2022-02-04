@@ -4,6 +4,11 @@ import ActivityList from "./ActivityList";
 import ActivityForm from "./ActivityForm";
 import axios from "axios";
 
+//create activity idea 
+//delete activity 
+//get all activities 
+
+
 
 const activitiesData = [
   {
@@ -34,6 +39,7 @@ function App() {
     axios.get(BASE_URL).then((res) => {
       // console.log(res.data)
       setActivities(res.data);
+      console.log(activities)
     });
   };
 
@@ -65,17 +71,26 @@ function App() {
     setNewActivity("")
   }
 
+//target the id of the item that is clicked and delete it 
+const markComplete = (activity) => {
+  let url2 = `http://localhost:8080/api/activity/${activity._id}`
+  console.log(url2)
+ axios.delete(url2, activity._id)
+ setActivities(activities.filter((item) => item.activity._id !== activity._id
+    ))
+ 
+}
 
-  const markComplete = (id) => {
-    const url3 = BASE_URL + id
-    console.log(url3)
-    axios.delete(url3)
-    .then(()=>{
-      console.log("this was deleted")
 
-    })
 
-  }
+
+
+  // const markComplete = (id) => {
+  //   let { id } = useParams()
+  // const url2 = BASE_URL + id 
+  // console.log(url2)
+  //   //why is _id coming up as undefinde? 
+  // }
 
   return (
     <>
@@ -85,6 +100,7 @@ function App() {
         handleChange={handleChange}
         newActivity={newActivity}
         markComplete = {markComplete}
+        getActivities ={getActivities}
       />
       <ActivityList activities={activities} markComplete={markComplete} />
     </>
