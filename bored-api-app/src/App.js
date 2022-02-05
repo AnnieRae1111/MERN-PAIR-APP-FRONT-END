@@ -30,6 +30,11 @@ const activitiesData = [
   },
 ];
 
+
+//need to add another getinitial activities that references a seperate database that we don't mess with . 
+//when you hit the getActivities button, you can get pre-seeded data 
+//need to figure out how to update an activitiy / what that will look like 
+
 function App() {
   // const [data, setData] =useState(null)
   const [activities, setActivities] = useState([]); //will use this to set initial data
