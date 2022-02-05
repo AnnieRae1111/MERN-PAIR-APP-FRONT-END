@@ -38,6 +38,7 @@ const getActivities = () => {
 }
 
   console.log(activityData)
+  console.log(activities)
   
   useEffect(()=> {
     getActivities(activityData)
@@ -69,10 +70,55 @@ const getActivities = () => {
     
     console.log(activity._id)
     const uniqueURL = `http://localhost:8080/activity/${activity._id}`
-    axios
-      .delete(uniqueURL, activity._id)
+    axios.delete(uniqueURL, activity._id)
   }
 
+  //UPDATING AN ACTIVITY
+  const [ updatedActivityString, setUpdatedActivityString ] = useState('')
+  // const [ activity, setActivity ] = useState({})
+
+  const handleChange1 = (event) => {
+    //this handle change needs to target the single object (maybe with id)
+    setUpdatedActivityString(event.target.value)
+  }
+  
+//accept the value of updated activity, put it via axios, etc. 
+  const handleClick1 = (e) => {
+    const uniqueURL = `http://localhost:8080/activity/${e._id}`
+    
+    activityData.map(item => {
+      if(item._id === e._id) {axios.put(uniqueURL, updatedActivityString)}
+    })
+    //SO CLOSE -- don't know what to do
+    
+    // const id = activitiesData.id
+    // console.log(id)
+    // setActivity({
+    //   activity: updatedActivityString, 
+    //   id: `${ e._id }`
+    // })
+    // console.log(e.activity)
+    // console.log(e._id)
+    // console.log(activity._id)
+    // console.log(activity.activity)
+    // console.log(updatedActivityString)
+    // console.log(activityData.id)
+    //we need to update the activity.activity to updatedActivity
+    // console.log(updatedActivity)
+    //this also needs to update the array of activities
+    // if(e._id === activityData.id) {
+    //   
+    // }
+    
+      
+    //   .then(res => console.log(res.data.activity))
+      // setActivity({ activity: { res.data.activity } }
+      // const updatedActivities = [...activities, ]
+      // console.log(updatedActivity)
+      // console.log(activityData)
+      // console.log(activities)
+      
+  }
   // console.log(activityData._id)
 
   return (
@@ -82,7 +128,7 @@ const getActivities = () => {
             <label className = "label"> NEW ACTIVITY: 
             <input type="text" id="activity" name="activity"
             value={newActivity}
-            onChange = { handleChange}
+            onChange = { handleChange }
             />
             </label>
             <input type="submit"></input>
@@ -92,6 +138,8 @@ const getActivities = () => {
           <div>
             <p>{ activity.activity }</p>
             <button onClick={ () => { handleClick(activity)}}> Delete </button>  
+            <input type="text" value = { updatedActivityString } onChange = { handleChange1 }></input>
+            <button onClick={ () => { handleClick1(activity)}}> Update </button>
           </div>
       )})}
       {/* <div>{ activities }</div>  */}
