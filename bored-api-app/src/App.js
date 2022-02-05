@@ -3,12 +3,14 @@ import "./App.css";
 import ActivityList from "./ActivityList";
 import ActivityForm from "./ActivityForm";
 import axios from "axios";
+import { set } from "mongoose";
 
-//create activity idea 
-//delete activity 
-//get all activities 
+//create activity idea
+//delete activity
+//get all activities
 
-
+//button for get activities to return activities? 
+//delete button to delete one 
 
 const activitiesData = [
   {
@@ -30,25 +32,32 @@ const activitiesData = [
 
 function App() {
   // const [data, setData] =useState(null)
-  const [activities, setActivities] = useState([]); //will use this to set initial data 
-  const [newActivity, setNewActivity] = useState("") //new variable to track handleChange . This variable will be used to update our state 
-
+  const [activities, setActivities] = useState([]); //will use this to set initial data
+  const [newActivity, setNewActivity] = useState(""); //new variable to track handleChange . This variable will be used to update our state
+  const [isDeleted, setIsDeleted] = useState(false)
+  const [isCreated, setIsCreated] = useState(false)
 
   const BASE_URL = "http://localhost:8080/api/activity";
   const getActivities = () => {
     axios.get(BASE_URL).then((res) => {
       // console.log(res.data)
       setActivities(res.data);
-      console.log(activities)
-    });
+      setIsDeleted(false)
+      setIsCreated(false)
+      console.log(activities);       //getting all the activities inititally 
+    });                            
   };
 
   useEffect(() => {
-    getActivities(activities);
-  }, []);
+    getActivities();
+  }, [isDeleted, isCreated]);
 
-  if(!activities){
-    return <p>Loading activities</p>
+  
+
+
+
+  if (!activities) {
+    return <p>Loading activities</p>;
   }
 
   const handleChange = (event) => {
@@ -57,40 +66,34 @@ function App() {
     console.log(newActivity);
   };
 
-
   const handleSubmit = (event) => {
-    event.preventDefault()
+    event.preventDefault();
     const newItem = {
-      activity: newActivity
-    }
-    const items = [...activities, newItem]
-    console.log(items)
-    setActivities(items)
-    console.log(activities)
+      activity: newActivity,
+    };
+    const items = [...activities, newItem];
+    console.log(items);
+    // setActivities(items);
+    console.log(activities);
     axios.post(BASE_URL, items)
-    setNewActivity("")
-  }
+    .then(getActivities())
+    .then(setIsCreated(true))
+    setNewActivity("");
+  };
 
-//target the id of the item that is clicked and delete it 
-const markComplete = (activity) => {
-  let url2 = `http://localhost:8080/api/activity/${activity._id}`
-  console.log(url2)
- axios.delete(url2, activity._id)
- setActivities(activities.filter((item) => item.activity._id !== activity._id
+  //target the id of the item that is clicked and delete it
+  const markComplete = (activity) => {
+    let url2 = `http://localhost:8080/api/activity/${activity._id}`
+    console.log(url2)
+    axios.delete(url2, activity._id)
+    .then(setActivities(
+      activities.filter((item) => item.activity._id !== activity._id)
     ))
- 
-}
-
-
-
-
-
-  // const markComplete = (id) => {
-  //   let { id } = useParams()
-  // const url2 = BASE_URL + id 
-  // console.log(url2)
-  //   //why is _id coming up as undefinde? 
-  // }
+    .then(res => console.log(res))
+    .catch(console.error())
+    // setActivities(activities.shift(activity))
+    setIsDeleted(true)
+  };
 
   return (
     <>
@@ -99,8 +102,8 @@ const markComplete = (activity) => {
         handleSubmit={handleSubmit}
         handleChange={handleChange}
         newActivity={newActivity}
-        markComplete = {markComplete}
-        getActivities ={getActivities}
+        markComplete={markComplete}
+        getActivities={getActivities}
       />
       <ActivityList activities={activities} markComplete={markComplete} />
     </>
