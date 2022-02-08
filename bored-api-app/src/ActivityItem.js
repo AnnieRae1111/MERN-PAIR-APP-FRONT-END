@@ -1,8 +1,13 @@
-    const ActivityItem = ({ activity, markComplete }) => {
+    const ActivityItem = ({index, id, event, handleUpdate,handleUpdateClick, updatedActivity, activity, markComplete }) => {
     return (
         <div className="item-container">
         <div className="item">
             <h3>{activity.activity}</h3> 
+            <form>
+            <input type="text" id={ index }
+            value = {updatedActivity.index}  onChange={(event)=>{handleUpdate(event,index)}}>
+            </input>
+            </form>
             <button
             onClick={() => {
                 markComplete(activity);
@@ -10,6 +15,7 @@
             >
             DELETE
             </button>
+            <button onClick={()=> {handleUpdateClick(activity, index)}}> UPDATE </button>
         </div>
         </div>
     );

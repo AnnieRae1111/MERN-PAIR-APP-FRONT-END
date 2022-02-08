@@ -3,7 +3,7 @@ import "./App.css";
 import ActivityList from "./ActivityList";
 import ActivityForm from "./ActivityForm";
 import axios from "axios";
-import { set } from "mongoose";
+import { useParams } from 'react-router-dom'
 
 //create activity idea
 //delete activity
@@ -42,6 +42,34 @@ function App() {
   const [isDeleted, setIsDeleted] = useState(false)
   const [isCreated, setIsCreated] = useState(false)
 
+
+
+  //UPDATE ---
+const [updatedActivity, setUpdatedActivity] = useState("")
+
+const handleUpdate = (event, index) => {
+  if (index === parseInt(event.target.id)){
+    setUpdatedActivity({[event.target.id]:event.target.value})  //making updatedActivity into an object, 
+    
+  }
+  console.log(typeof(index))
+  // setUpdatedActivity(event.target.value);
+  console.log(typeof(event.target.id))
+  console.log(updatedActivity, "this is the updated activity")
+  console.log(event)
+}
+
+const handleUpdateClick = (activity,index) => {
+  const uniqueURL = `http://localhost:8080/api/activity/${activity._id}`
+  console.log(activity, "this is the event")
+  console.log(activity._id, "this is the event id")
+  axios.put(uniqueURL, { activity: updatedActivity[index]})
+
+  }
+
+
+
+
   const BASE_URL = "http://localhost:8080/api/activity";
   const getActivities = () => {
     axios.get(BASE_URL).then((res) => {
@@ -57,13 +85,10 @@ function App() {
     getActivities();
   }, [isDeleted, isCreated]);
 
-  
 
-
-
-  if (!activities) {
-    return <p>Loading activities</p>;
-  }
+  // if (!activities) {
+  //   return <p>Loading activities</p>;
+  // }
 
   const handleChange = (event) => {
     setNewActivity(event.target.value);
@@ -100,6 +125,7 @@ function App() {
     setIsDeleted(true)
   };
 
+
   return (
     <>
       <ActivityForm
@@ -109,10 +135,14 @@ function App() {
         newActivity={newActivity}
         markComplete={markComplete}
         getActivities={getActivities}
+        handleUpdate= {handleUpdate}
+        // updateActivity ={updatedActivity}
+        handleUpdateClick = {handleUpdateClick}
       />
-      <ActivityList activities={activities} markComplete={markComplete} />
+      <ActivityList  handleUpdateClick= {handleUpdateClick} handleUpdate={handleUpdate} updatedActivity = {updatedActivity} activities={activities} markComplete={markComplete} />
     </>
   );
 }
+
 
 export default App;
