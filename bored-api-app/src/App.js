@@ -50,7 +50,7 @@ const [updatedActivity, setUpdatedActivity] = useState("")
 const handleUpdate = (event, index) => {
   if (index === parseInt(event.target.id)){
     setUpdatedActivity({[event.target.id]:event.target.value})  //making updatedActivity into an object, 
-    
+                                                        //index is a number that can be iterated on 
   }
   console.log(typeof(index))
   // setUpdatedActivity(event.target.value);
@@ -60,7 +60,7 @@ const handleUpdate = (event, index) => {
 }
 
 const handleUpdateClick = (activity,index) => {
-  const uniqueURL = `http://localhost:8080/api/activity/${activity._id}`
+  const uniqueURL = `http://localhost:8000/api/activity/${activity._id}`
   console.log(activity, "this is the event")
   console.log(activity._id, "this is the event id")
   axios.put(uniqueURL, { activity: updatedActivity[index]})
@@ -70,7 +70,7 @@ const handleUpdateClick = (activity,index) => {
 
 
 
-  const BASE_URL = "http://localhost:8080/api/activity";
+  const BASE_URL = "http://localhost:8000/api/activity";
   const getActivities = () => {
     axios.get(BASE_URL).then((res) => {
       // console.log(res.data)
@@ -113,7 +113,7 @@ const handleUpdateClick = (activity,index) => {
 
   //target the id of the item that is clicked and delete it
   const markComplete = (activity) => {
-    let url2 = `http://localhost:8080/api/activity/${activity._id}`
+    let url2 = `http://localhost:8000/api/activity/${activity._id}`
     console.log(url2)
     axios.delete(url2, activity._id)
     .then(setActivities(

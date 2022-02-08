@@ -5,7 +5,8 @@
             <h3>{activity.activity}</h3> 
             <form>
             <input type="text" id={ index }
-            value = {updatedActivity.index}  onChange={(event)=>{handleUpdate(event,index)}}>
+            value = {updatedActivity.index}  onChange={(event)=>{handleUpdate(event,index)}}>  
+            {/* event is being defined only on the change */}
             </input>
             </form>
             <button
